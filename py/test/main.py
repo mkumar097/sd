@@ -1,2 +1,5 @@
 import numpy as np
-import importlib
+import importlib as il
+
+from readin import *
+
