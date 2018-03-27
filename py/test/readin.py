@@ -9,9 +9,8 @@ atm_mass = np.zeros(num_atoms)
 fn = open('coords.dat', 'r')
 for i in range(num_atoms):
     c_info = fn.readline().split()
-    atm = c_info[0]
     coords[i, :] = map(float, c_info[1:4])
-    atm_mass[i] = element(atm).mass
+    atm_mass[i] = element(c_info[0]).mass
 fn.close()
 
 # read in the excited state forces on your atoms
