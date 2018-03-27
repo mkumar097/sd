@@ -16,6 +16,22 @@ def readin(coords_dat='coords.dat', eforces_dat='eforces.dat',
         coords[i, :] = map(float, c_info[1:4])
         atm_mass[i] = element(c_info[0]).mass
 
+    # read in the modes for your system
+    with open(modes.dat, 'r') as file_modes:
+        lines_modes = file_modes.readlines()
+
+    modes = np.zeros((num_atoms*3,num_atoms))
+
+    for i, line in enumerate((num_atoms*3)-6):
+        m_info = line.split()
+        if m_info[0] == i:
+            for j in enumerate(num_atoms):
+                m_info = line.split()
+                modes[i,j] = map(float, m_info[3])
+        else:
+            print "Can't properly read in the normal modes for your system."
+            break
+
     # read in the excited state forces on your atoms
     eforces = read_forces(eforces_dat)
 

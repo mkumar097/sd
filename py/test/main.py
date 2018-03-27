@@ -1,5 +1,4 @@
 from __future__ import absolute_import
-
 from .readin import readin
 import math
 
@@ -26,12 +25,10 @@ wvnbr2Hz = 3.0e10                                                              #
 Hz2wvnbr = 1.0e0/wvnbr2Hz                                                      # Hertz to wavenumbers
 Hz2aufreq = 2.418884e-17                                                       # Hertz to atomic units of frequency
 
-<<<<<<< HEAD
 
-coords, eforces, gforces = readin()
-=======
+coords, eforces, gforces = readin()                                            # read in the coordinates, modes, forces
+
 sum_mass = sum(atm_mass[:])*amu2kg                                             # atomic masses are now in kg
 eforces *= au2joules/(au2ang*ang2m)/math.sqrt(sum_mass)                        # excited state forces are in m/s**2
 gforces *= au2joules/(au2ang*ang2m)/math.sqrt(sum_mass)                        # ground state forces are in m/s**2
->>>>>>> 3ea0b1889afc7fff11abf6ec2529dac029f2189e
 
