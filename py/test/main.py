@@ -1,5 +1,6 @@
-import numpy as np
-from readin import *
+from __future__ import absolute_import
+
+from .readin import readin
 import math
 
 # unit conversion factors
@@ -23,4 +24,7 @@ amu2kg = 1.66053892e-27                                                        #
 wvnbr2Hz = 3.0e10                                                              # wavenumbers to Hertz
 Hz2wvnbr = 1.0e0/wvnbr2Hz                                                      # Hertz to wavenumbers
 Hz2aufreq = 2.418884e-17                                                       # Hertz to atomic units of frequency
+
+
+coords, eforces, gforces = readin()
 

@@ -1,34 +1,38 @@
 import numpy as np
 from periodic import element
 
-# read in the coordinates for your system
-num_atoms = len(open('coords.dat', 'r').readlines())
-coords = np.zeros((num_atoms, 3))
-atm_mass = np.zeros(num_atoms)
 
-fn = open('coords.dat', 'r')
-for i in range(num_atoms):
-    c_info = fn.readline().split()
-    coords[i, :] = map(float, c_info[1:4])
-    atm_mass[i] = element(c_info[0]).mass
-fn.close()
+def readin(coords_dat='coords.dat', eforces_dat='eforces.dat',
+           gforces_dat='gforces.dat'):
+    # read in the coordinates for your system
+    with open(coords_dat, 'r') as file_coords:
+        lines_coords = file_coords.readlines()
+    num_atoms = len(lines_coords)
+    coords = np.zeros((num_atoms, 3))
+    atm_mass = np.zeros(num_atoms)
 
-# read in the excited state forces on your atoms
-num_eforces = len(open('eforces.dat', 'r').readlines())
-eforces = np.zeros((num_eforces, 4))
+    for i, line in enumerate(lines_coords):
+        c_info = line.split()
+        coords[i, :] = map(float, c_info[1:4])
+        atm_mass[i] = element(c_info[0]).mass
 
-fn = open('eforces.dat', 'r')
-for i in range(num_eforces-1):
-    e_info = fn.readline().split()
-    eforces[i, :] = map(float, e_info[1:5])
-fn.close()
+    # read in the excited state forces on your atoms
+    eforces = read_forces(eforces_dat)
 
-# read in the ground state forces on your atoms
-num_gforces = len(open('gforces.dat', 'r').readlines())
-gforces = np.zeros((num_gforces, 4))
+    # read in the ground state forces on your atoms
+    gforces = read_forces(gforces_dat)
 
-fn = open('gforces.dat', 'r')
-for i in range(num_gforces-1):
-    g_info = fn.readline().split()
-    gforces[i, :] = map(float, g_info[1:5])
-fn.close()
+    return coords, eforces, gforces
+
+
+def read_forces(forces_dat):
+    with open(forces_dat, 'r') as file_forces:
+        lines_forces = file_forces.readlines()
+    num_forces = len(lines_forces)
+    forces = np.zeros((num_forces, 4))
+
+    for i, line in enumerate(lines_forces[:-2]):  # skipping last line
+        e_info = line.split()
+        forces[i, :] = map(float, e_info[1:5])
+    return forces
+
