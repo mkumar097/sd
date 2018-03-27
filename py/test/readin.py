@@ -1,8 +1,32 @@
+import numpy as np
+
+# read in the coordinates for your system
 num_atoms = len(open('coords.dat', 'r').readlines())
-coords = np.zeros((num_atoms, 2))
+coords = np.zeros((num_atoms, 3))
 
 fn = open('coords.dat', 'r')
 for i in range(num_atoms):
     c_info = fn.readline().split()
-    print c_info
+    coords[i, :] = map(float, c_info[1:4])
+fn.close()
+
+# read in the excited state forces on your atoms
+num_eforces = len(open('eforces.dat', 'r').readlines())
+eforces = np.zeros((num_eforces, 4))
+
+fn = open('eforces.dat', 'r')
+for i in range(num_eforces):
+    e_info = fn.readline().split()
+    print i, e_info[2:5]
+    eforces[i, :] = map(float, e_info[1:5])
+fn.close()
+
+# read in the ground state forces on your atoms
+num_gforces = len(open('gforces.dat', 'r').readlines())
+gforces = np.zeros((num_gforces, 4))
+
+fn = open('gforces.dat', 'r')
+for i in range(num_gforces):
+    g_info = fn.readline().split()
+    gforces[i, :] = map(float, g_info[1:5])
 fn.close()
