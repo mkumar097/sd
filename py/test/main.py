@@ -32,3 +32,5 @@ sum_mass = sum(atm_mass[:])*amu2kg                                             #
 eforces *= au2joules/(au2ang*ang2m)/math.sqrt(sum_mass)                        # excited state forces are in m/s**2
 gforces *= au2joules/(au2ang*ang2m)/math.sqrt(sum_mass)                        # ground state forces are in m/s**2
 
+2pi
+
