@@ -1,6 +1,3 @@
-from __future__ import absolute_import
-from readin import readin
-from constants_py import *
 import math
 
 # unit conversion factors
@@ -25,14 +22,3 @@ amu2kg = 1.66053892e-27                                                        #
 wvnbr2Hz = 3.0e10                                                              # wavenumbers to Hertz
 Hz2wvnbr = 1.0e0/wvnbr2Hz                                                      # Hertz to wavenumbers
 Hz2aufreq = 2.418884e-17                                                       # Hertz to atomic units of frequency
-
-
-coords, eforces, gforces, atm_mass, nm_modes = readin()                                            # read in the coordinates, modes, forces
-
-# sum_mass = sum(atm_mass[:])*amu2kg                                             # summed atomic masses are now in kg
-# atm_mass *= amu2kg                                                             # atomic masses are now in kg
-# eforces[:] *= au2joules/(au2ang*ang2m)/math.sqrt(atm_mass[:])                        # excited state forces are in m/s**2
-# gforces[:] *= au2joules/(au2ang*ang2m)/math.sqrt(atm_mass[:])                        # ground state forces are in m/s**2
-
-
-

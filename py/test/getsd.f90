@@ -72,62 +72,62 @@ program analyze
   
 
   
-  !read forces in amu, hartrees/bohr
-  itmp=0 ; open(unit=10, file='eforces.dat')
-  do i=1, natoms/3
-     read(10,*) idum, imass, eforce(itmp+1), eforce(itmp+2), eforce(itmp+3)
-     if (imass.eq.15) mass(itmp+1)=2.d0*dble(imass)
-     if (imass.eq.1) mass(itmp+1)=dble(imass)
-     if (imass.eq.6) mass(itmp+1)=2.d0*dble(imass)
-     if (imass.eq.7) mass(itmp+1)=2.d0*dble(imass)
-     if (imass.eq.8) mass(itmp+1)=2.d0*dble(imass)
-     mass(itmp+2)=mass(itmp+1) ; mass(itmp+3)=mass(itmp+1)
-     itmp=i*3
-  end do
-  close(10)
-
-  
-  itmp=0 ; open(unit=10, file='gforces.dat')
-  do i=1, natoms/3
-     read(10,*) idum, idum, gforce(itmp+1), gforce(itmp+2), gforce(itmp+3)
-     itmp=i*3
-  end do
-  close(10)
+!  !read forces in amu, hartrees/bohr
+!  itmp=0 ; open(unit=10, file='eforces.dat')
+!  do i=1, natoms/3
+!     read(10,*) idum, imass, eforce(itmp+1), eforce(itmp+2), eforce(itmp+3)
+!     if (imass.eq.15) mass(itmp+1)=2.d0*dble(imass)
+!     if (imass.eq.1) mass(itmp+1)=dble(imass)
+!     if (imass.eq.6) mass(itmp+1)=2.d0*dble(imass)
+!     if (imass.eq.7) mass(itmp+1)=2.d0*dble(imass)
+!     if (imass.eq.8) mass(itmp+1)=2.d0*dble(imass)
+!     mass(itmp+2)=mass(itmp+1) ; mass(itmp+3)=mass(itmp+1)
+!     itmp=i*3
+!  end do
+!  close(10)
+!
+!
+!  itmp=0 ; open(unit=10, file='gforces.dat')
+!  do i=1, natoms/3
+!     read(10,*) idum, idum, gforce(itmp+1), gforce(itmp+2), gforce(itmp+3)
+!     itmp=i*3
+!  end do
+!  close(10)
  
  
-  mass = mass * amu2kg
+!  mass = mass * amu2kg
   eforce = eforce * au2joules / (au2ang*ang2m) / dsqrt(mass)
   gforce = gforce * au2joules / (au2ang*ang2m) / dsqrt(mass)
  
-  open(unit=10, file='modes.dat')
-  do i=1 ,nmodes-6
-     read(10,*) cdum, idum, cdum, freq(i), cdum, redmass(i)
-     if ( idum .ne. i ) exit
-     do j=1,natoms
-        read(10,*) idum, idum, idum, nmvector(i,j)
-        nmvector(i,j)=nmvector(i,j)*dsqrt(mass(j))
-        norm=norm+nmvector(i,j)*nmvector(i,j)
-     end do
-     nmvector(i,:)=nmvector(i,:)/dsqrt(norm)
-     norm=0.d0
-  end do
-  close(10)
+!  open(unit=10, file='modes.dat')
+!  do i=1 ,nmodes-6
+!     read(10,*) cdum, idum, cdum, freq(i), cdum, redmass(i)
+!     if ( idum .ne. i ) exit
+!     do j=1,natoms
+!        read(10,*) idum, idum, idum, nmvector(i,j)
+!        nmvector(i,j)=nmvector(i,j)*dsqrt(mass(j))
+!        norm=norm+nmvector(i,j)*nmvector(i,j)
+!     end do
+!     nmvector(i,:)=nmvector(i,:)/dsqrt(norm)
+!     norm=0.d0
+!  end do
+!  close(10)
 
 
-  tempfreq=freq ; tempredmass=redmass ; tempnmvector=nmvector
-  freq=0.d0 ; redmass=0.d0 ; nmvector=0.d0 !freq 
+!  tempfreq=freq ; tempredmass=redmass ; tempnmvector=nmvector
+!  freq=0.d0 ; redmass=0.d0 ; nmvector=0.d0 !freq
   
-  do i=1, nmodes-6
-     freq(i+6)=tempfreq(i)
-     redmass(i+6)=tempredmass(i)
-     nmvector(i+6,:)=tempnmvector(i,:)
-  end do
+!  do i=1, nmodes-6
+!     freq(i+6)=tempfreq(i)
+!     redmass(i+6)=tempredmass(i)
+!     nmvector(i+6,:)=tempnmvector(i,:)
+!  end do
   
-  do i=1, nmodes
-     if (redmass(i).eq.0.d0) then
-        redmass(i) = 1.d0
-     end if
-  end do
+!  do i=1, nmodes
+!     if (redmass(i).eq.0.d0) then
+!        redmass(i) = 1.d0
+!     end if
+!  end do
   
   !add in translational eigenvectors 
   itmp=1
