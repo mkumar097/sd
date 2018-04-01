@@ -16,12 +16,11 @@ def readin(coords_dat='coords.dat', eforces_dat='eforces.dat',
 
     for i, line in enumerate(lines_coords):
         c_info = line.split()
+        atm_mass[i] = element(c_info[0]).mass*amu2kg
         coords[i, :] = map(float, c_info[1:4])
-        atm_mass[i] = element(c_info[0]).mass
+        coords[i, :] *= atm_mass[i]
 
-    atm_mass *= amu2kg
-
-    # read in the modes for your system
+    # read in normal modes for your system
     num_modes = (3*num_atoms)
     red_mass = np.zeros(num_modes)
     modes = np.zeros((num_modes, num_modes))
@@ -39,6 +38,11 @@ def readin(coords_dat='coords.dat', eforces_dat='eforces.dat',
             else:
                 print ("Unable to correctly read in the normal modes for your system.")
 
+    # build the translational normal modes for your system
+    for i in range(3):
+        for j in range(3*num_atoms):
+            modes[i, j] = math.sqrt(atm_mass[int(math.floor(j/3))])
+
     # add a reduced mass of 1.0 for the first 6 normal modes which are rotational and translational modes
     red_mass[0:6] = 1.0
 
@@ -55,10 +59,9 @@ def read_forces(forces_dat):
     with open(forces_dat, 'r') as file_forces:
         lines_forces = file_forces.readlines()
     num_forces = len(lines_forces)
-    forces = np.zeros((num_forces, 4))
+    forces = np.zeros((num_forces, 3))
 
-    for i, line in enumerate(lines_forces[:-2]):  # skipping last line
+    for i, line in enumerate(lines_forces[:-1]):  # skipping last line
         e_info = line.split()
-        forces[i, :] = map(float, e_info[1:5])
+        forces[i, :] = map(float, e_info[2:5])
     return forces
-
