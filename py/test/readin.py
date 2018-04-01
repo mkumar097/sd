@@ -1,8 +1,7 @@
 import numpy as np
 import math
+from constants_py import amu2kg
 from periodic import element
-
-amu2kg = 1.66053892e-27                                                        # atomic mass unit to kg
 
 def readin(coords_dat='coords.dat', eforces_dat='eforces.dat',
            gforces_dat='gforces.dat', modes_dat='modes.dat'):
@@ -12,13 +11,13 @@ def readin(coords_dat='coords.dat', eforces_dat='eforces.dat',
         lines_coords = file_coords.readlines()
     num_atoms = len(lines_coords)
     coords = np.zeros((num_atoms, 3))
-    atm_mass = np.zeros(num_atoms)
+    atm_mass = np.zeros((num_atoms,3))
 
     for i, line in enumerate(lines_coords):
         c_info = line.split()
-        atm_mass[i] = element(c_info[0]).mass*amu2kg
+        atm_mass[i, :] = element(c_info[0]).mass*amu2kg
         coords[i, :] = map(float, c_info[1:4])
-        coords[i, :] *= atm_mass[i]
+        coords[i, :] *= atm_mass[i, 0]
 
     # read in normal modes for your system
     num_modes = (3*num_atoms)
@@ -32,7 +31,7 @@ def readin(coords_dat='coords.dat', eforces_dat='eforces.dat',
                 norm = 0.0
                 for j in range(3*num_atoms):
                     mode_info = file_modes.readline().split()
-                    modes[i+6, j] = float(mode_info[3])*math.sqrt(atm_mass[int(math.floor(j/3))])
+                    modes[i+6, j] = float(mode_info[3])*math.sqrt(atm_mass[int(math.floor(j/3)), 0])
                     norm += modes[i+6, j]*modes[i+6, j]
                 modes[i+6, :] /= math.sqrt(norm)
             else:
@@ -41,7 +40,7 @@ def readin(coords_dat='coords.dat', eforces_dat='eforces.dat',
     # build the translational normal modes for your system
     for i in range(3):
         for j in range(3*num_atoms):
-            modes[i, j] = math.sqrt(atm_mass[int(math.floor(j/3))])
+            modes[i, j] = math.sqrt(atm_mass[int(math.floor(j/3)), 0])
 
     # add a reduced mass of 1.0 for the first 6 normal modes which are rotational and translational modes
     red_mass[0:6] = 1.0
@@ -61,7 +60,7 @@ def read_forces(forces_dat):
     num_forces = len(lines_forces)
     forces = np.zeros((num_forces, 3))
 
-    for i, line in enumerate(lines_forces[:-1]):  # skipping last line
+    for i, line in enumerate(lines_forces):
         e_info = line.split()
         forces[i, :] = map(float, e_info[2:5])
     return forces
